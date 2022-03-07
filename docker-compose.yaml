@@ -1,0 +1,34 @@
+version: '3.0'
+
+services:
+    postgres:
+        build: ./postgres
+        container_name: postgres
+        environment:
+            POSTGRES_USER: postgres
+            POSTGRES_PASSWORD: postgres
+            POSTGRES_DB: postgres
+            POSTGRES_HOST: postgres
+        ports:
+            - 5432:5432
+        restart: always
+    dbapp:
+        build: ./dbapp
+        container_name: dbapp
+        ports:
+            - "5000:5000"  
+        environment:
+            POSTGRES_USER: postgres
+            POSTGRES_PASSWORD: postgres
+            POSTGRES_DB: postgres
+            POSTGRES_HOST: postgres
+        depends_on:
+            - postgres
+    clientapp:
+        build: ./clientapp
+        container_name: clientapp
+        ports:
+            - "5001:5001" 
+        depends_on:
+            - dbapp
+    
